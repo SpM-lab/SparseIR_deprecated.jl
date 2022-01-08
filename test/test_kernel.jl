@@ -3,7 +3,8 @@ using Test
 
 import PyCall: pyimport, PyNULL, PyVector
 
-const irbasis3 = pyimport("irbasis3")
+irbasis3 = pyimport("irbasis3")
+
 
 @testset "kernel.KernelFlat" begin
     lambda_ = 10.0

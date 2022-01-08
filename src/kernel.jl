@@ -4,7 +4,7 @@ Kernel
 abstract type KernelBase end
 
 struct KernelFFlat <: KernelBase
-    pyobj
+    o::PyObject
 end
 
 function KernelFFlat(lambda::Float64)
@@ -12,11 +12,11 @@ function KernelFFlat(lambda::Float64)
 end
 
 struct KernelBFlat <: KernelBase
-    pyobj
+    o::PyObject
 end
 
 function KernelBFlat(lambda::Float64)
     KernelBFlat(irbasis3.KernelBFlat(lambda))
 end
 
-(k::KernelBase)(x::Float64, y::Float64) = k.pyobj(x, y)
+(k::KernelBase)(x::Float64, y::Float64) = k.o(x, y)
