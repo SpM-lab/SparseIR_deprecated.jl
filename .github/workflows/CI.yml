@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - develop
     tags: '*'
   pull_request:
 concurrency:
@@ -18,31 +19,49 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.0'
+          #- '1.0'
           - '1.7'
-          - 'nightly'
+          #- 'nightly'
         os:
           - ubuntu-latest
         arch:
           - x64
     steps:
       - uses: actions/checkout@v2
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Set ENV Variables for PyCall
+        run: echo ENV["PYTHON"] = "${{ env.pythonLocation }}/bin/python" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
       - uses: julia-actions/cache@v1
       - uses: julia-actions/julia-buildpkg@v1
+        env:
+          PYTHON : "${{ env.pythonLocation }}/bin/python"
       - uses: julia-actions/julia-runtest@v1
   docs:
     name: Documentation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set ENV Variables for PyCall
+        run: echo ENV["PYTHON"] = "${{ env.pythonLocation }}/bin/python" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
       - uses: julia-actions/setup-julia@v1
         with:
           version: '1'
       - uses: julia-actions/julia-buildpkg@v1
+        env:
+          PYTHON : "${{ env.pythonLocation }}/bin/python"
       - uses: julia-actions/julia-docdeploy@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
