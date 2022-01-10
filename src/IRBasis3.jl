@@ -14,7 +14,7 @@ function __init__()
     end
 end
 
-@enum Statistics fermion boson
+include("types.jl")
 include("exports.jl")
 include("kernel.jl")
 include("basis.jl")
