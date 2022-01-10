@@ -9,7 +9,7 @@ irbasis3 = pyimport("irbasis3")
 @testset "basis.FiniteTempBasis" begin
     lambda_ = 10.0
     beta = 1.0
-    eps = 1e-8
+    eps = 1e-5
     wmax = lambda_/beta
     kernels = [IRBasis3.KernelFFlat, IRBasis3.KernelBFlat]
 
@@ -27,5 +27,10 @@ irbasis3 = pyimport("irbasis3")
         @test all(basis.u(taus) .== basis_py.u(taus))
         @test all(basis.v(omegas) .== basis_py.v(omegas))
         @test all(basis.uhat(v) .== basis_py.uhat(v))
+
+        for l in 1:size(basis)
+            @test all(basis.u[l](taus) .== basis_py.u[l-1](taus))
+            @test all(basis.uhat[l](v) .== basis_py.uhat[l-1](v))
+        end
     end
 end

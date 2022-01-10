@@ -15,9 +15,10 @@ function __init__()
 end
 
 include("types.jl")
-include("exports.jl")
 include("kernel.jl")
+include("poly.jl")
 include("basis.jl")
 include("sampling.jl")
+include("exports.jl")
 
 end

@@ -3,12 +3,12 @@ FiniteTempBasis
 """
 struct FiniteTempBasis
     o::PyObject
-    u::PyObject
-    uhat::PyObject
-    v::PyObject
+    u::PiecewiseLegendrePoly
+    uhat::PiecewiseLegendreFT
+    v::PiecewiseLegendrePoly
 end
 
-size(basis::FiniteTempBasis)::Int64 = basis.o.size
+Base.size(basis::FiniteTempBasis)::Int64 = basis.o.size
 statistics(basis::FiniteTempBasis)::Statistics = basis.o.statistics
 
 FiniteTempBasis(o::PyObject) = FiniteTempBasis(o, o.u, o.uhat, o.v)
