@@ -1,0 +1,1 @@
+const min_irbasis3_version = "3.0a7"
