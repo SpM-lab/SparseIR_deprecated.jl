@@ -8,6 +8,7 @@ struct MatsubaraSampling <: Sampling
     sampling_points::Vector{Int64}
 end
 
+
 struct TauSampling <: Sampling
     o::PyObject
     sampling_points::Vector{Float64}

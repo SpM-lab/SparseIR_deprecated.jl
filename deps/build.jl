@@ -19,7 +19,7 @@ end
 include("../src/backend.jl")
 
 function install_irbasis3()
-    println("Checking if required Python libraries are installed...")
+    @info "Checking if required Python libraries are installed..."
     install_packages(["setuptools"])
     
     correct_irbasis3_exists = true
@@ -29,19 +29,20 @@ function install_irbasis3()
         pkg_resources = pyimport("pkg_resources")
         if pkg_resources.parse_version(irbasis3.__version__) <
             pkg_resources.parse_version(min_irbasis3_version)
-            println("Installed irbasis3 is too old!")
+            @info "Installed irbasis3 is too old!"
             correct_irbasis3_exists = false
         end
     catch e
-        println("Failed to import irbasis3. May be not installed!")
-        println(e)
+        @info "Failed to import irbasis3!"
         correct_irbasis3_exists = false
     end
     
     if !correct_irbasis3_exists
-        println("Trying to install irbasis3 using pip...")
+        @info "Installing irbasis3 using pip..."
         install_packages(["irbasis3>=$(min_irbasis3_version)"])
     end
 end
 
-install_irbasis3()
+if "INSTALL_IRBASIS3" ∈ keys(ENV)
+   install_irbasis3()
+end
