@@ -13,11 +13,17 @@ many features of the irbasis3 library from within a `Julia` session.
 To use this package, both Python and a proper version of `irbasis3` library must be
 installed on your system.
 Note that the `irbasis3` must be installed via `pip`.
-To install a proper version of `irbasis3` into the Python environment with which `PyCall` is configured,
-run the following command.
+If a proper version of `irbasis3` is already installed,
+`IRBasis3` can be installed by running
 
 ```Julia
-julia -e 'ENV["INSTALL_IRBASIS3"]=1; using Pkg; Pkg.build("IRBasis3");'
+julia -e 'using Pkg; Pkg.add(url="https://github.com/shinaoka/IRBasis3.jl.git")'
+```
+
+Alternatively, run the following command to install both of `irbasis3` and `IRBasis3.jl`:
+
+```Julia
+julia -e 'ENV["INSTALL_IRBASIS3"]=1; using Pkg; Pkg.add(url="https://github.com/shinaoka/IRBasis3.jl.git"); Pkg.build("IRBasis3")'
 ```
 
 ### Usage
