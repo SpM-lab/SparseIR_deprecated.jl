@@ -1,14 +1,14 @@
 ```@meta
-CurrentModule = IRBasis3
+CurrentModule = SparseIR
 ```
 
-# IRBasis3
+# SparseIR
 
-Documentation for [IRBasis3](https://github.com/shinaoka/IRBasis3.jl).
+Documentation for [SparseIR](https://github.com/shinaoka/SparseIR.jl).
 
 ```@index
 ```
 
 ```@autodocs
-Modules = [IRBasis3]
+Modules = [SparseIR]
 ```

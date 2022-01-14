@@ -1,16 +1,16 @@
-using IRBasis3
+using SparseIR
 using Documenter
 
-DocMeta.setdocmeta!(IRBasis3, :DocTestSetup, :(using IRBasis3); recursive=true)
+DocMeta.setdocmeta!(SparseIR, :DocTestSetup, :(using SparseIR); recursive=true)
 
 makedocs(;
-    modules=[IRBasis3],
+    modules=[SparseIR],
     authors="Hiroshi Shinaoka <h.shinaoka@gmail.com> and contributors",
-    repo="https://github.com/shinaoka/IRBasis3.jl/blob/{commit}{path}#{line}",
-    sitename="IRBasis3.jl",
+    repo="https://github.com/shinaoka/SparseIR.jl/blob/{commit}{path}#{line}",
+    sitename="SparseIR.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://shinaoka.github.io/IRBasis3.jl",
+        canonical="https://shinaoka.github.io/SparseIR.jl",
         assets=String[],
     ),
     pages=[
@@ -19,6 +19,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/shinaoka/IRBasis3.jl",
+    repo="github.com/shinaoka/SparseIR.jl",
     devbranch="main",
 )

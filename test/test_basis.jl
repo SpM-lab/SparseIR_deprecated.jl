@@ -1,4 +1,4 @@
-using IRBasis3
+using SparseIR
 using Test
 
 import PyCall: pyimport, PyNULL, PyVector
@@ -11,7 +11,7 @@ irbasis3 = pyimport("irbasis3")
     beta = 1.0
     eps = 1e-5
     wmax = lambda_/beta
-    kernels = [IRBasis3.KernelFFlat, IRBasis3.KernelBFlat]
+    kernels = [SparseIR.KernelFFlat, SparseIR.KernelBFlat]
 
     # test points
     taus = collect(range(0, beta, length=100))

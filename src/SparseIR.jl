@@ -1,4 +1,4 @@
-module IRBasis3
+module SparseIR
 
 import PyCall: pyimport, PyNULL, PyVector, PyObject
 
@@ -18,7 +18,7 @@ function __init__()
         println()
         throw(e)
     end
-    pkg_resources = pyimport("pkg_resources") # irbasis3 requires pkg_resources
+    pkg_resources = pyimport("pkg_resources") # SparseIR requires pkg_resources
 
     if pkg_resources.parse_version(irbasis3.__version__) < pkg_resources.parse_version(min_irbasis3_version)
         error("irbasis3 $(irbasis3.__version__) found, but required irbasis3>=$(min_irbasis3_version)!")

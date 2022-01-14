@@ -33,7 +33,7 @@ git-tree-sha1 = "f7be53659ab06ddc986428d3a9dcc95f6fa6705a"
 uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.2"
 
-[[deps.IRBasis3]]
+[[deps.SparseIR]]
 path = ".."
 uuid = "4fe2279e-80f0-4adb-8463-ee114ff56b7d"
 version = "0.1.0"

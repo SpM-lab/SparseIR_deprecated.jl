@@ -1,4 +1,4 @@
-name = "IRBasis3"
+name = "SparseIR"
 uuid = "4fe2279e-80f0-4adb-8463-ee114ff56b7d"
 authors = ["Hiroshi Shinaoka <h.shinaoka@gmail.com> and contributors"]
 version = "0.1.0"

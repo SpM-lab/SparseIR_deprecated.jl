@@ -1,4 +1,4 @@
-using IRBasis3
+using SparseIR
 using Test
 
 import PyCall: pyimport, PyNULL, PyVector
@@ -6,8 +6,8 @@ import PyCall: pyimport, PyNULL, PyVector
 irbasis3 = pyimport("irbasis3")
 
 test_params = [
-    (IRBasis3.KernelFFlat, irbasis3.KernelFFlat, fermion),
-    (IRBasis3.KernelBFlat, irbasis3.KernelBFlat, boson)
+    (SparseIR.KernelFFlat, irbasis3.KernelFFlat, fermion),
+    (SparseIR.KernelBFlat, irbasis3.KernelBFlat, boson)
 ]
 
 @testset "sampling.MatsubaraSampling" begin
@@ -17,7 +17,7 @@ test_params = [
     beta = lambda_/wmax
     for (K, K_py, stat) in test_params
         basis_jl = FiniteTempBasis(K(lambda_), stat, beta, eps)
-        smp_matsu_jl = IRBasis3.MatsubaraSampling(basis_jl)
+        smp_matsu_jl = SparseIR.MatsubaraSampling(basis_jl)
 
         stat_str = Dict(fermion => "F", boson => "B")[stat]
         basis_py = irbasis3.FiniteTempBasis(K_py(lambda_), stat_str, beta, eps)

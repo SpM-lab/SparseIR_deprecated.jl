@@ -69,6 +69,6 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
-            using IRBasis3
-            DocMeta.setdocmeta!(IRBasis3, :DocTestSetup, :(using IRBasis3); recursive=true)
-            doctest(IRBasis3)'
+            using SparseIR
+            DocMeta.setdocmeta!(SparseIR, :DocTestSetup, :(using SparseIR); recursive=true)
+            doctest(SparseIR)'
