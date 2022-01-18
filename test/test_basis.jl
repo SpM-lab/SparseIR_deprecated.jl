@@ -3,7 +3,7 @@ using Test
 
 import PyCall: pyimport, PyNULL, PyVector
 
-irbasis3 = pyimport("irbasis3")
+sparse_ir = pyimport("sparse_ir")
 
 
 @testset "basis.FiniteTempBasis" begin
@@ -23,7 +23,7 @@ irbasis3 = pyimport("irbasis3")
 
         k = K(lambda_)
         basis = FiniteTempBasis(k, stat, beta, eps)
-        basis_py = irbasis3.FiniteTempBasis(k.o, stat, beta, eps)
+        basis_py = sparse_ir.FiniteTempBasis(k.o, stat, beta, eps)
         @test all(basis.u(taus) .== basis_py.u(taus))
         @test all(basis.v(omegas) .== basis_py.v(omegas))
         @test all(basis.uhat(v) .== basis_py.uhat(v))

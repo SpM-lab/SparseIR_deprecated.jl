@@ -17,7 +17,7 @@ FiniteTempBasis(o::PyObject) = FiniteTempBasis(o, o.u, o.uhat, o.v)
 Create a FiniteTempBasis object by decomposing a given kernel
 """
 function FiniteTempBasis(kernel::KernelBase, statistics::Statistics, beta::Float64, eps::Float64)
-    o = irbasis3.FiniteTempBasis(kernel.o, statistics==fermion ? "F" : "B", beta, eps=eps)
+    o = sparse_ir.FiniteTempBasis(kernel.o, statistics==fermion ? "F" : "B", beta, eps=eps)
     FiniteTempBasis(o)
 end
 

@@ -3,14 +3,14 @@ using Test
 
 import PyCall: pyimport, PyNULL, PyVector
 
-irbasis3 = pyimport("irbasis3")
+sparse_ir = pyimport("sparse_ir")
 
 
 @testset "kernel.KernelFlat" begin
     lambda_ = 10.0
     kernels = [
-        (SparseIR.KernelFFlat, irbasis3.KernelFFlat),
-        (SparseIR.KernelBFlat, irbasis3.KernelBFlat)
+        (SparseIR.KernelFFlat, sparse_ir.KernelFFlat),
+        (SparseIR.KernelBFlat, sparse_ir.KernelBFlat)
     ]
     for (K, K_py) in kernels
         k = K(lambda_)

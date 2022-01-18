@@ -8,7 +8,7 @@ struct KernelFFlat <: KernelBase
 end
 
 function KernelFFlat(lambda::Float64)
-    KernelFFlat(irbasis3.KernelFFlat(lambda))
+    KernelFFlat(sparse_ir.KernelFFlat(lambda))
 end
 
 struct KernelBFlat <: KernelBase
@@ -16,7 +16,7 @@ struct KernelBFlat <: KernelBase
 end
 
 function KernelBFlat(lambda::Float64)
-    KernelBFlat(irbasis3.KernelBFlat(lambda))
+    KernelBFlat(sparse_ir.KernelBFlat(lambda))
 end
 
 (k::KernelBase)(x::Float64, y::Float64) = k.o(x, y)

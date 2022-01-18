@@ -18,7 +18,7 @@ function MatsubaraSampling(basis::FiniteTempBasis, sampling_points::Union{Nothin
     if sampling_points === nothing
         sampling_points = basis.o.default_matsubara_sampling_points()
     end
-    o = irbasis3.MatsubaraSampling(basis.o, sampling_points)
+    o = sparse_ir.MatsubaraSampling(basis.o, sampling_points)
     MatsubaraSampling(o, sampling_points)
 end
 
@@ -26,7 +26,7 @@ function TauSampling(basis::FiniteTempBasis, sampling_points::Union{Nothing,Vect
     if sampling_points === nothing
         sampling_points = basis.o.default_tau_sampling_points()
     end
-    o = irbasis3.TauSampling(basis.o, sampling_points)
+    o = sparse_ir.TauSampling(basis.o, sampling_points)
     TauSampling(o, sampling_points)
 end
 

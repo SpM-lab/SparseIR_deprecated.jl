@@ -1,2 +1,2 @@
-irbasis3
+sparse-ir
 xprec
