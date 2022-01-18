@@ -11,7 +11,7 @@ function __init__()
         println()
         println("******************************************************************************")
         println(
-            "Failed to import sparse_ir. Please install a proper version of sparse_ir manually!"
+            "Failed to import sparse-ir. Please install a proper version of sparse-ir manually!"
         )
         println("******************************************************************************")
         println()
