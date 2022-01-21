@@ -26,6 +26,7 @@ sparse_ir = pyimport("sparse_ir")
         @test all(basis.u(taus) .== basis_py.u(taus))
         @test all(basis.v(omegas) .== basis_py.v(omegas))
         @test all(basis.uhat(v) .== basis_py.uhat(v))
+        @test basis.statistics == stat
 
         for l in 1:size(basis)
             @test all(basis.u[l](taus) .== basis_py.u[l-1](taus))
