@@ -8,13 +8,17 @@ struct FiniteTempBasis
     v::PiecewiseLegendrePoly
     s::Vector{Float64}
     statistics::Statistics
+    size::Int64
 end
 
 Base.size(basis::FiniteTempBasis)::Int64 = basis.o.size
 statistics(basis::FiniteTempBasis)::Statistics = basis.o.statistics
 
 FiniteTempBasis(o::PyObject) = FiniteTempBasis(
-    o, o.u, o.uhat, o.v, o.s, o.statistics == "F" ? fermion : boson)
+        o, o.u, o.uhat, o.v, o.s,
+        o.statistics == "F" ? fermion : boson,
+        o.size
+    )
 
 """
 Create a FiniteTempBasis object by decomposing a given kernel
