@@ -6,12 +6,13 @@ struct FiniteTempBasis
     u::PiecewiseLegendrePoly
     uhat::PiecewiseLegendreFT
     v::PiecewiseLegendrePoly
+    s::Vector{Float64}
 end
 
 Base.size(basis::FiniteTempBasis)::Int64 = basis.o.size
 statistics(basis::FiniteTempBasis)::Statistics = basis.o.statistics
 
-FiniteTempBasis(o::PyObject) = FiniteTempBasis(o, o.u, o.uhat, o.v)
+FiniteTempBasis(o::PyObject) = FiniteTempBasis(o, o.u, o.uhat, o.v, o.s)
 
 """
 Create a FiniteTempBasis object by decomposing a given kernel

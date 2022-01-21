@@ -6,12 +6,14 @@ abstract type Sampling end
 struct MatsubaraSampling <: Sampling
     o::PyObject
     sampling_points::Vector{Int64}
+    cond::Float64
 end
 
 
 struct TauSampling <: Sampling
     o::PyObject
     sampling_points::Vector{Float64}
+    cond::Float64
 end
 
 function MatsubaraSampling(basis::FiniteTempBasis, sampling_points::Union{Nothing,Vector{Int64}}=nothing)
@@ -19,7 +21,7 @@ function MatsubaraSampling(basis::FiniteTempBasis, sampling_points::Union{Nothin
         sampling_points = basis.o.default_matsubara_sampling_points()
     end
     o = sparse_ir.MatsubaraSampling(basis.o, sampling_points)
-    MatsubaraSampling(o, sampling_points)
+    MatsubaraSampling(o, sampling_points, o.cond)
 end
 
 function TauSampling(basis::FiniteTempBasis, sampling_points::Union{Nothing,Vector{Float64}}=nothing)
@@ -27,7 +29,7 @@ function TauSampling(basis::FiniteTempBasis, sampling_points::Union{Nothing,Vect
         sampling_points = basis.o.default_tau_sampling_points()
     end
     o = sparse_ir.TauSampling(basis.o, sampling_points)
-    TauSampling(o, sampling_points)
+    TauSampling(o, sampling_points, o.cond)
 end
 
 function evaluate(smpl::Sampling, al::Array{T,N}; axis::Int64=1) where {T, N}
