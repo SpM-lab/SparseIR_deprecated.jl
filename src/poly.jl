@@ -1,6 +1,9 @@
 """
 Piecewise Legendre polynomial.
 """
+
+import PyCall: PyObject
+
 struct PiecewiseLegendrePoly
     o::PyObject
 end
@@ -8,6 +11,16 @@ end
 Base.convert(::Type{PiecewiseLegendrePoly}, o::PyObject) = PiecewiseLegendrePoly(o)
 (p::PiecewiseLegendrePoly)(x) = p.o(x)
 Base.getindex(p::PiecewiseLegendrePoly, i::Int64) = PiecewiseLegendrePoly(p.o[i-1])
+
+"""
+f: Function-like object
+   f should takes a real-valued vector and return a real-valued D-dimensional arrays.
+   axis option specifies which axis of this array correponds to the axis of the input.
+
+axis:
+   By default, the last axis is used for computing overlap.
+"""
+overlap(poly::PiecewiseLegendrePoly, f, axis::Union{Int64,Nothing}=nothing) = poly.o.overlap(f, axis)
 
 """
 PiecewiseLegendreFT

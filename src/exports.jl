@@ -1,4 +1,4 @@
 export FiniteTempBasis, MatsubaraSampling, TauSampling
 export fermion, boson
-export evaluate, fit
+export evaluate, fit, overlap
 export KernelFFlat, KernelBFlat

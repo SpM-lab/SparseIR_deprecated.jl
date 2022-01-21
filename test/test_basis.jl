@@ -35,8 +35,16 @@ sparse_ir = pyimport("sparse_ir")
 end
 
 
-@testset "basis.FiniteTempBasis" begin
+@testset "basis.FiniteTempBasisInt" begin
     lambda = 10
     beta = 1
     basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta, 1e-5)
+    @test basis isa FiniteTempBasis
+end
+
+@testset "basis.FiniteTempBasisDefaultEPS" begin
+    lambda = 10
+    beta = 1
+    basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta)
+    @test basis isa FiniteTempBasis
 end
