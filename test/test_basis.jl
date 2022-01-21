@@ -5,7 +5,6 @@ import PyCall: pyimport, PyNULL, PyVector
 
 sparse_ir = pyimport("sparse_ir")
 
-
 @testset "basis.FiniteTempBasis" begin
     lambda_ = 10.0
     beta = 1.0
@@ -33,4 +32,11 @@ sparse_ir = pyimport("sparse_ir")
             @test all(basis.uhat[l](v) .== basis_py.uhat[l-1](v))
         end
     end
+end
+
+
+@testset "basis.FiniteTempBasis" begin
+    lambda = 10
+    beta = 1
+    basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta, 1e-5)
 end

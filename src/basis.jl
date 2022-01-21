@@ -16,14 +16,14 @@ FiniteTempBasis(o::PyObject) = FiniteTempBasis(o, o.u, o.uhat, o.v)
 """
 Create a FiniteTempBasis object by decomposing a given kernel
 """
-function FiniteTempBasis(kernel::KernelBase, statistics::Statistics, beta::Float64, eps::Float64)
-    o = sparse_ir.FiniteTempBasis(kernel.o, statistics==fermion ? "F" : "B", beta, eps=eps)
+function FiniteTempBasis(kernel::KernelBase, statistics::Statistics, beta::Real, eps::Float64)
+    o = sparse_ir.FiniteTempBasis(kernel.o, statistics==fermion ? "F" : "B", Float64(beta), eps=eps)
     FiniteTempBasis(o)
 end
 
 """
 Create a FiniteTempBasis object using KernelFFlat
 """
-function FiniteTempBasis(beta::Float64, wmax::Float64, statistics::Statistics, eps::Float64)
-    FiniteTempBasis(KernelFFlat(beta * wmax), statistics, beta, eps)
+function FiniteTempBasis(beta::Real, wmax::Real, statistics::Statistics, eps::Float64)
+    FiniteTempBasis(KernelFFlat(Float64(beta * wmax)), statistics, Float64(beta), eps)
 end
