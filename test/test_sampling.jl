@@ -45,3 +45,10 @@ end
         @test smp_matsu_jl.cond == smp_matsu_py.cond
     end
 end
+
+@testset "sampling.return_types" begin
+    @test Base.return_types(fit, (MatsubaraSampling, Array{Float64,3})) == [Array{ComplexF64,3}]
+    @test Base.return_types(fit, (MatsubaraSampling, Array{ComplexF64,3})) == [Array{ComplexF64,3}]
+    @test Base.return_types(fit, (TauSampling, Array{Float64,3})) == [Array{ComplexF64,3}]
+    @test Base.return_types(fit, (TauSampling, Array{ComplexF64,3})) == [Array{ComplexF64,3}]
+end
