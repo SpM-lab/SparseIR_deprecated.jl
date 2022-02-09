@@ -51,3 +51,14 @@ end
     basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta)
     @test basis isa FiniteTempBasis
 end
+
+
+@testset "basis.FiniteTempBasisNewConstructor" begin
+    lambda = 10
+    beta = 1
+    basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta)
+    basis2 = FiniteTempBasis(fermion, beta, lambda/beta, kernel=KernelFFlat(lambda))
+    basis3 = FiniteTempBasis(fermion, beta, lambda/beta)
+    @test all(basis.s .== basis2.s)
+    @test all(basis.s .== basis3.s)
+end

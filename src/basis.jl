@@ -31,6 +31,15 @@ function FiniteTempBasis(
 end
 
 
+function FiniteTempBasis(
+    statistics::Statistics, beta::Real, wmax::Real; eps::Union{Float64,Nothing}=nothing, kernel::Union{KernelBase,Nothing}=nothing)
+    kernel_py = kernel !== nothing ? kernel.o : nothing
+    o = sparse_ir.FiniteTempBasis(
+        statistics==fermion ? "F" : "B", Float64(beta), Float64(wmax), eps=eps, kernel=kernel_py)
+    FiniteTempBasis(o)
+end
+
+
 """
 Create a FiniteTempBasis object using KernelFFlat
 """
