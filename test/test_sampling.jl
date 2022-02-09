@@ -20,7 +20,7 @@ test_params = [
         smp_tau_jl = SparseIR.TauSampling(basis_jl)
 
         stat_str = Dict(fermion => "F", boson => "B")[stat]
-        basis_py = sparse_ir.FiniteTempBasis(K_py(lambda_), stat_str, beta, eps)
+        basis_py = sparse_ir.FiniteTempBasis(stat_str, beta, wmax, eps, kernel=K_py(lambda_))
         smp_tau_py = sparse_ir.TauSampling(basis_py)
 
         @test all(smp_tau_jl.sampling_points .== smp_tau_py.sampling_points)
@@ -38,7 +38,7 @@ end
         smp_matsu_jl = SparseIR.MatsubaraSampling(basis_jl)
 
         stat_str = Dict(fermion => "F", boson => "B")[stat]
-        basis_py = sparse_ir.FiniteTempBasis(K_py(lambda_), stat_str, beta, eps)
+        basis_py = sparse_ir.FiniteTempBasis(stat_str, beta, wmax, eps, kernel=K_py(lambda_))
         smp_matsu_py = sparse_ir.MatsubaraSampling(basis_py)
 
         @test all(smp_matsu_jl.sampling_points .== smp_matsu_py.sampling_points)

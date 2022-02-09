@@ -1,7 +1,7 @@
 using PyCall
 import VersionParsing: vparse
 
-const min_sparse_ir_version = "0.2"
+const min_sparse_ir_version = "0.4.2"
 
 #=
 function install_packages(packages::Vector{String})

@@ -22,7 +22,7 @@ sparse_ir = pyimport("sparse_ir")
 
         k = K(lambda_)
         basis = FiniteTempBasis(k, stat, beta, eps)
-        basis_py = sparse_ir.FiniteTempBasis(k.o, stat, beta, eps)
+        basis_py = sparse_ir.FiniteTempBasis(stat, beta, wmax, eps=eps, kernel=k.o)
         @test all(basis.u(taus) .== basis_py.u(taus))
         @test all(basis.v(omegas) .== basis_py.v(omegas))
         @test all(basis.uhat(v) .== basis_py.uhat(v))
