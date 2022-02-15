@@ -5,20 +5,8 @@ import PyCall: pyimport, PyNULL, PyVector, PyObject
 const sparse_ir = PyNULL()
 
 function __init__()
-    try
-        copy!(sparse_ir, pyimport("sparse_ir"))
-    catch e
-        println()
-        println("******************************************************************************")
-        println(
-            "Failed to import sparse-ir. Please install a proper version of sparse-ir manually!"
-        )
-        println("******************************************************************************")
-        println()
-    end
-    if !check_version_sparse_ir()
-        println("Upgrade sparse-ir!")
-    end
+    copy!(sparse_ir, pyimport_conda("sparse_ir", "sparse-ir", "h.shinaoka"))
+    check_version_sparse_ir()
 end
 
 include("backend.jl")
