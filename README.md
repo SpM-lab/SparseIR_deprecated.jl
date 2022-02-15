@@ -12,13 +12,32 @@ many features of the sparse_ir library from within a `Julia` session.
 
 To use this package, both Python and a proper version of `sparse-ir` library must be
 installed on your system.
-Note that the `sparse-ir` must be installed via `pip`.
-If a proper version of `sparse-ir` is already installed,
-`SparseIR` can be installed by running
+If `PyCall` is installed using `Conda`
+(which is the default behavior if no system `python` is found), then the
+underlying `sparse-ir` library will be installed automatically via `Conda` when the
+package is first loaded.
+An optional library `xprec`, which allows to compute the IR basis functions with greater accuracy, is not installed automatically.
+If needed, `xprec`  must be installed manually:
 
-```Julia
-julia -e 'using Pkg; Pkg.add("SparseIR")'
 ```
+using Pkg
+Pkg.add("Conda") #  if needed
+using Conda
+Conda.add("xprec", channel="h.shinaoka")
+```
+
+As of now (Feb. 15 2022), binary packages of `xprec` are not available on aarch64.
+The underlying Python libraries can be updated as
+```
+using Pkg
+Pkg.add("Conda") #  if needed
+using Conda
+Conda.update()
+```
+
+If `PyCall` is not installed using `Conda`, installing both Python and the underlying libraries can be done by other means.
+
+
 
 ### Usage
 
