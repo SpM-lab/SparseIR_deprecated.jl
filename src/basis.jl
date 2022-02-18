@@ -34,7 +34,11 @@ end
 
 
 function FiniteTempBasis(
-    statistics::Statistics, beta::Real, wmax::Real; eps::Union{Float64,Nothing}=nothing, kernel::Union{KernelBase,Nothing}=nothing)
+        statistics::Statistics, beta::Real, wmax::Real,
+        eps::Union{Float64,Nothing}=nothing
+        ;
+        kernel::Union{KernelBase,Nothing}=nothing,
+    )
     kernel_py = kernel !== nothing ? kernel.o : nothing
     o = sparse_ir.FiniteTempBasis(
         statistics==fermion ? "F" : "B", Float64(beta), Float64(wmax), eps=eps, kernel=kernel_py)
@@ -45,8 +49,25 @@ end
 """
 Create a FiniteTempBasis object using LogisticKernel
 """
-function FiniteTempBasis(beta::Real, wmax::Real, statistics::Statistics, eps::Float64)
+function FiniteTempBasis(
+        beta::Real,
+        wmax::Real,
+        statistics::Statistics,
+        eps::Union{Float64,Nothing}
+    )
     FiniteTempBasis(LogisticKernel(Float64(beta * wmax)), statistics, Float64(beta), eps)
+end
+
+
+"""
+Construct FiniteTempBasis objects for fermion and bosons using
+the same LogisticKernel instance.
+"""
+function finite_temp_bases(
+            beta::Float64, wmax::Float64, eps::Float64
+        )::Tuple{FiniteTempBasis, FiniteTempBasis}
+    basis_f, basis_b = sparse_ir.basis.finite_temp_bases(beta, wmax, eps)
+    return (FiniteTempBasis(basis_f), FiniteTempBasis(basis_b))
 end
 
 

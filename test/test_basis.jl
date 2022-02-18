@@ -37,6 +37,20 @@ sparse_ir = pyimport("sparse_ir")
     end
 end
 
+@testset "basis.FiniteTempBases" begin
+    lambda_ = 10.0
+    beta = 1.0
+    eps = 1e-5
+    wmax = lambda_/beta
+    basis_f, basis_b = finite_temp_bases(beta, wmax, eps)
+
+    basis_f_ref = FiniteTempBasis(fermion, beta, wmax, eps)
+    basis_b_ref = FiniteTempBasis(boson, beta, wmax, eps)
+
+    @test all(basis_f.s == basis_f_ref.s)
+    @test all(basis_b.s == basis_b_ref.s)
+end
+
 
 @testset "basis.FiniteTempBasisInt" begin
     lambda = 10
