@@ -10,7 +10,7 @@ sparse_ir = pyimport("sparse_ir")
     beta = 1.0
     eps = 1e-5
     wmax = lambda_/beta
-    kernels = [SparseIR.KernelFFlat, SparseIR.KernelBFlat]
+    kernels = [SparseIR.LogisticKernel, SparseIR.RegularizedBoseKernel]
 
     # test points
     taus = collect(range(0, beta, length=100))
@@ -41,14 +41,14 @@ end
 @testset "basis.FiniteTempBasisInt" begin
     lambda = 10
     beta = 1
-    basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta, 1e-5)
+    basis = FiniteTempBasis(LogisticKernel(lambda), fermion, beta, 1e-5)
     @test basis isa FiniteTempBasis
 end
 
 @testset "basis.FiniteTempBasisDefaultEPS" begin
     lambda = 10
     beta = 1
-    basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta)
+    basis = FiniteTempBasis(LogisticKernel(lambda), fermion, beta)
     @test basis isa FiniteTempBasis
 end
 
@@ -56,8 +56,8 @@ end
 @testset "basis.FiniteTempBasisNewConstructor" begin
     lambda = 10
     beta = 1
-    basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta)
-    basis2 = FiniteTempBasis(fermion, beta, lambda/beta, kernel=KernelFFlat(lambda))
+    basis = FiniteTempBasis(LogisticKernel(lambda), fermion, beta)
+    basis2 = FiniteTempBasis(fermion, beta, lambda/beta, kernel=LogisticKernel(lambda))
     basis3 = FiniteTempBasis(fermion, beta, lambda/beta)
     @test all(basis.s .== basis2.s)
     @test all(basis.s .== basis3.s)

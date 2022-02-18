@@ -1,7 +1,9 @@
+abstract type Basis end
+
 """
 FiniteTempBasis
 """
-struct FiniteTempBasis
+struct FiniteTempBasis <: Basis
     o::PyObject
     u::PiecewiseLegendrePoly
     uhat::PiecewiseLegendreFT
@@ -41,8 +43,23 @@ end
 
 
 """
-Create a FiniteTempBasis object using KernelFFlat
+Create a FiniteTempBasis object using LogisticKernel
 """
 function FiniteTempBasis(beta::Real, wmax::Real, statistics::Statistics, eps::Float64)
-    FiniteTempBasis(KernelFFlat(Float64(beta * wmax)), statistics, Float64(beta), eps)
+    FiniteTempBasis(LogisticKernel(Float64(beta * wmax)), statistics, Float64(beta), eps)
+end
+
+
+function default_omega_sampling_points(basis::FiniteTempBasis)::Vector{Float64}
+    basis.o.default_omega_sampling_points()
+end
+
+
+function default_tau_sampling_points(basis::FiniteTempBasis)::Vector{Float64}
+    basis.o.default_tau_sampling_points()
+end
+
+
+function default_matsubara_sampling_points(basis::FiniteTempBasis)::Vector{Int64}
+    basis.o.default_matsuba_sampling_points()
 end

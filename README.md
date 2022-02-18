@@ -46,7 +46,7 @@ using SparseIR
 lambda = 100
 beta = 10
 eps = 1e-7
-k = KernelFFlat(lambda)
+k = LogisticKernel(lambda)
 basis_f = FiniteTempBasis(k, fermion, beta, eps)
 basis_b = FiniteTempBasis(k, boson, beta, eps)
 ```

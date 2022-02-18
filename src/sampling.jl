@@ -22,7 +22,7 @@ struct MatsubaraSampling <: Sampling
     cond::Float64
 end
 
-function MatsubaraSampling(basis::FiniteTempBasis, sampling_points::Union{Nothing,Vector{Int64}}=nothing)
+function MatsubaraSampling(basis::Basis, sampling_points::Union{Nothing,Vector{Int64}}=nothing)
     if sampling_points === nothing
         sampling_points = basis.o.default_matsubara_sampling_points()
     end
@@ -40,7 +40,7 @@ struct TauSampling <: Sampling
     cond::Float64
 end
 
-function TauSampling(basis::FiniteTempBasis, sampling_points::Union{Nothing,Vector{Float64}}=nothing)
+function TauSampling(basis::Basis, sampling_points::Union{Nothing,Vector{Float64}}=nothing)
     if sampling_points === nothing
         sampling_points = basis.o.default_tau_sampling_points()
     end

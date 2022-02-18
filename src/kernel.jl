@@ -3,20 +3,20 @@ Kernel
 """
 abstract type KernelBase end
 
-struct KernelFFlat <: KernelBase
+struct LogisticKernel <: KernelBase
     o::PyObject
 end
 
-function KernelFFlat(lambda::Real)
-    KernelFFlat(sparse_ir.KernelFFlat(Float64(lambda)))
+function LogisticKernel(lambda::Real)
+    LogisticKernel(sparse_ir.LogisticKernel(Float64(lambda)))
 end
 
-struct KernelBFlat <: KernelBase
+struct RegularizedBoseKernel <: KernelBase
     o::PyObject
 end
 
-function KernelBFlat(lambda::Real)
-    KernelBFlat(sparse_ir.KernelBFlat(Float64(lambda)))
+function RegularizedBoseKernel(lambda::Real)
+    RegularizedBoseKernel(sparse_ir.RegularizedBoseKernel(Float64(lambda)))
 end
 
 (k::KernelBase)(x::Float64, y::Float64) = k.o(x, y)

@@ -6,8 +6,8 @@ import PyCall: pyimport, PyNULL, PyVector
 sparse_ir = pyimport("sparse_ir")
 
 test_params = [
-    (SparseIR.KernelFFlat, sparse_ir.KernelFFlat, fermion),
-    (SparseIR.KernelBFlat, sparse_ir.KernelBFlat, boson)
+    (SparseIR.LogisticKernel, sparse_ir.LogisticKernel, fermion),
+    (SparseIR.RegularizedBoseKernel, sparse_ir.RegularizedBoseKernel, boson)
 ]
 
 @testset "sampling.TauSampling" begin

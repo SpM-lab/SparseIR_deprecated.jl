@@ -7,7 +7,7 @@ import PyCall: pyimport, PyNULL, PyVector
 @testset "poly.overlap" begin
     lambda = 10.0
     beta = 1.0
-    basis = FiniteTempBasis(KernelFFlat(lambda), fermion, beta)
+    basis = FiniteTempBasis(LogisticKernel(lambda), fermion, beta)
     f = x::Array{Float64}->2*x
     @test overlap(basis.u, f) isa Array{Float64}
 
