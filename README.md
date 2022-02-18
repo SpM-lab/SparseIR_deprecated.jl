@@ -43,11 +43,11 @@ If `PyCall` is not installed using `Conda`, installing both Python and the under
 
 ```Julia
 using SparseIR
-lambda = 100
-beta = 10
+beta = 10.0
+wmax = 1.0
 eps = 1e-7
-basis_f = FiniteTempBasis(fermion, beta, eps)
-basis_b = FiniteTempBasis(boson, beta, eps)
+basis_f = FiniteTempBasis(fermion, beta, wmax, eps)
+basis_b = FiniteTempBasis(boson, beta, wmax, eps)
 ```
 
 A more detailed tutorial and sample codes are available at
