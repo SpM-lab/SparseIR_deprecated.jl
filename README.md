@@ -46,7 +46,12 @@ using SparseIR
 lambda = 100
 beta = 10
 eps = 1e-7
-k = LogisticKernel(lambda)
-basis_f = FiniteTempBasis(k, fermion, beta, eps)
-basis_b = FiniteTempBasis(k, boson, beta, eps)
+basis_f = FiniteTempBasis(fermion, beta, eps)
+basis_b = FiniteTempBasis(boson, beta, eps)
 ```
+
+A more detailed tutorial and sample codes are available at
+
+* [PDF] https://www.overleaf.com/read/trcfnpmrhbcr
+* [Sampling codes] https://github.com/shinaoka/numerical_recipes_many_body_physics/tree/main/julia
+
