@@ -4,6 +4,7 @@ abstract type Basis end
 FiniteTempBasis
 """
 struct FiniteTempBasis <: Basis
+    beta::Float64
     o::PyObject
     u::PiecewiseLegendrePoly
     uhat::PiecewiseLegendreFT
@@ -17,7 +18,7 @@ Base.size(basis::FiniteTempBasis)::Int64 = basis.o.size
 statistics(basis::FiniteTempBasis)::Statistics = basis.o.statistics
 
 FiniteTempBasis(o::PyObject) = FiniteTempBasis(
-        o, o.u, o.uhat, o.v, o.s,
+        o.beta, o, o.u, o.uhat, o.v, o.s,
         o.statistics == "F" ? fermion : boson,
         o.size
     )

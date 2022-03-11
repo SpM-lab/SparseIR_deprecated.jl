@@ -1,7 +1,7 @@
 using PyCall
 import VersionParsing: vparse
 
-const min_sparse_ir_version = "0.6.0"
+const min_sparse_ir_version = "0.7.2"
 
 function check_version_sparse_ir()
     sparse_ir = pyimport("sparse_ir")
