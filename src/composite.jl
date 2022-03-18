@@ -42,6 +42,21 @@ struct CompositeBasis
     uhat::CompositeBasisFunctionFT
 end
 
+function _collect_polys(polys)
+    if any((p === nothing for p in polys))
+        return nothing
+    else
+        return [b.u for b in bases]
+    end
+end
+
+function CompositeBasis(bases::Vector{Basis})
+    size = sum((size(b) for b in bases))
+    u = CompositeBasisFunction([b.u for b in bases])
+    v = CompositeBasisFunction(_collect_polys([b.v for b in bases]))
+    uhat = CompositeBasisFunctionFT(_collect_polys([b.uhat for b in bases]))
+    CompositeBasis(bases[1].beta, size, bases, u, v, uhat)
+end
 
 function default_tau_sampling_points(basis::CompositeBasis)
     sort(unique(vcat((default_tau_sampling_points(b) for b in basis.bases))))
