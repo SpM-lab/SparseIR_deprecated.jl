@@ -28,5 +28,5 @@ function default_tau_sampling_points(basis::LegendreBasis)
 end
 
 function default_matsubara_sampling_points(basis::LegendreBasis; mitigate=true)
-    basis.o.default_matsubara_sampling_points(mitigate)
+    basis.o.default_matsubara_sampling_points()
 end

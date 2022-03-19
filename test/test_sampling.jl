@@ -18,7 +18,7 @@ using Test
             gtau = evaluate(smpl, gl)
             gl_reconst = fit(smpl, gtau)
 
-            isapprox(gl, gl_reconst, rtol=0, atol=cond(smpl)*eps*maximum(abs.(gl)) )
+            @test isapprox(gl, gl_reconst, rtol=0, atol=smpl.cond*eps*maximum(abs.(gl)) )
         end
     end
 end

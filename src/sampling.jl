@@ -52,6 +52,7 @@ struct TauSampling <: SamplingBase
     basis::Basis
     sampling_points::Vector{Float64}
     matrix::DecomposedMatrix
+    cond::Float64
 end
 
 
@@ -60,7 +61,7 @@ function TauSampling(basis::Basis, sampling_points::Union{Nothing,Vector{Float64
          default_tau_sampling_points(basis) : sampling_points
     mat_ = Matrix{Float64}(transpose(basis.u(sampling_points)))
     matrix = DecomposedMatrix(mat_)
-    TauSampling(basis, sampling_points, matrix)
+    TauSampling(basis, sampling_points, matrix, cond(matrix))
 end
 
 
@@ -80,11 +81,12 @@ struct MatsubaraSampling <: SamplingBase
     basis::Basis
     sampling_points::Vector{Int64}
     matrix::DecomposedMatrix
+    cond::Float64
 end
 
 function MatsubaraSampling(basis::Basis, sampling_points::Union{Nothing,Vector{Int64}}=nothing)
     sampling_points = sampling_points === nothing ?
          default_matsubara_sampling_points(basis) : sampling_points
     matrix = DecomposedMatrix(Matrix{ComplexF64}(transpose(basis.uhat(sampling_points))))
-    MatsubaraSampling(basis, sampling_points, matrix)
+    MatsubaraSampling(basis, sampling_points, matrix, cond(matrix))
 end
