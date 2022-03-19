@@ -1,5 +1,28 @@
 abstract type Basis end
 
+Base.size(basis::Basis)::Int64 = basis.o.size
+statistics(basis::Basis)::Statistics = basis.o.statistics
+
+"""
+IRBasis
+"""
+struct IRBasis <: Basis
+    o::PyObject
+    u::PiecewiseLegendrePoly
+    uhat::PiecewiseLegendreFT
+    v::PiecewiseLegendrePoly
+    s::Vector{Float64}
+    statistics::Statistics
+    size::Int64
+end
+
+IRBasis(o::PyObject) = IRBasis(
+        o, o.u, o.uhat, o.v, o.s,
+        o.statistics == "F" ? fermion : boson,
+        o.size
+    )
+
+
 """
 FiniteTempBasis
 """
@@ -14,8 +37,6 @@ struct FiniteTempBasis <: Basis
     size::Int64
 end
 
-Base.size(basis::FiniteTempBasis)::Int64 = basis.o.size
-statistics(basis::FiniteTempBasis)::Statistics = basis.o.statistics
 
 FiniteTempBasis(o::PyObject) = FiniteTempBasis(
         o.beta, o, o.u, o.uhat, o.v, o.s,
@@ -86,5 +107,5 @@ end
 
 
 function default_matsubara_sampling_points(basis::FiniteTempBasis)::Vector{Int64}
-    basis.o.default_matsuba_sampling_points()
+    basis.o.default_matsubara_sampling_points()
 end

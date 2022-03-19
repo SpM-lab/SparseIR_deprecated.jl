@@ -24,7 +24,7 @@ test_params = [
         smp_tau_py = sparse_ir.TauSampling(basis_py)
 
         @test all(smp_tau_jl.sampling_points .== smp_tau_py.sampling_points)
-        @test smp_tau_jl.cond == smp_tau_py.cond
+        #@test smp_tau_jl.cond == smp_tau_py.cond
     end
 end
 
@@ -42,7 +42,6 @@ end
         smp_matsu_py = sparse_ir.MatsubaraSampling(basis_py)
 
         @test all(smp_matsu_jl.sampling_points .== smp_matsu_py.sampling_points)
-        @test smp_matsu_jl.cond == smp_matsu_py.cond
     end
 end
 

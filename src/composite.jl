@@ -33,28 +33,28 @@ function (obj::CompositeBasisFunctionFT)(n::Union{Int64, Vector{Int64}})
 end
 
 
-struct CompositeBasis
+struct CompositeBasis <: Basis
     beta :: Float64
     size :: Int64
     bases :: Vector{Basis}
-    u::CompositeBasisFunction
-    v::CompositeBasisFunction
-    uhat::CompositeBasisFunctionFT
+    u::Union{CompositeBasisFunction,Nothing}
+    v::Union{CompositeBasisFunction,Nothing}
+    uhat::Union{CompositeBasisFunctionFT,Nothing}
 end
 
-function _collect_polys(polys)
+function _collect_polys(::Type{T}, polys) where T
     if any((p === nothing for p in polys))
         return nothing
     else
-        return [b.u for b in bases]
+        return T([p for p in polys])
     end
 end
 
 function CompositeBasis(bases::Vector{Basis})
-    size = sum((size(b) for b in bases))
+    size = sum((b.size for b in bases))
     u = CompositeBasisFunction([b.u for b in bases])
-    v = CompositeBasisFunction(_collect_polys([b.v for b in bases]))
-    uhat = CompositeBasisFunctionFT(_collect_polys([b.uhat for b in bases]))
+    v = _collect_polys(CompositeBasisFunction, [b.v for b in bases])
+    uhat = _collect_polys(CompositeBasisFunctionFT, [b.uhat for b in bases])
     CompositeBasis(bases[1].beta, size, bases, u, v, uhat)
 end
 
