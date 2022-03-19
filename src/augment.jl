@@ -22,3 +22,11 @@ function LegendreBasis(
     statistics::Statistics, beta::Real, size::Int64; cl::Vector{Float64}=ones(Float64, size))
     LegendreBasis(pyaugment.LegendreBasis(statistics, beta, size, cl))
 end
+
+function default_tau_sampling_points(basis::LegendreBasis)
+    basis.o.default_tau_sampling_points()
+end
+
+function default_matsubara_sampling_points(basis::LegendreBasis; mitigate=true)
+    basis.o.default_matsubara_sampling_points(mitigate)
+end

@@ -20,5 +20,5 @@ import LegendrePolynomials: Pl
     gl_from_tau = fit(tau_smpl, gtau)
 
     gtau_reconst = evaluate(tau_smpl, gl_from_tau)
-    isapprox(gtau, gtau_reconst, atol=1e-14 * maximum(abs.(gtau)), rtol=0)
+    @test isapprox(gtau, gtau_reconst, atol=1e-14 * maximum(abs.(gtau)), rtol=0)
 end
