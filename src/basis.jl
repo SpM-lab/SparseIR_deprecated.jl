@@ -6,8 +6,9 @@ statistics(basis::Basis)::Statistics = basis.o.statistics
 """
 IRBasis
 """
+
+#==
 struct IRBasis <: Basis
-    o::PyObject
     u::PiecewiseLegendrePoly
     uhat::PiecewiseLegendreFT
     v::PiecewiseLegendrePoly
@@ -21,6 +22,42 @@ IRBasis(o::PyObject) = IRBasis(
         o.statistics == "F" ? fermion : boson,
         o.size
     )
+
+const SVEResultType = Tuple{Matrix{Float64}, Vector{Float64}, Matrix{Float64}}
+
+function get_kernel(statistics::Statistics, lambda::Float64, kernel::Union{Kernel,Nothing})
+    if kernel === nothing
+        kernel = LogisticKernel(lambda)
+    else
+        if hasproperty(kernel, :lambda)
+            if kernel.lambda != lambda
+                throw(RuntimeError("lambda mismatch!"))
+            end
+        end
+    end
+    kernel
+end
+
+function IRBasis(
+    statistics::Statistics, lambda::Float64, eps=None;
+    kernel::Union{Kernel,Nothing}=nothing,
+    sve_result::Union{SVEResultType,Nothing}=nothing)
+
+    kernel = get_kernel(statistics, lambda, kernel)
+    if sve_result === nothing
+        u, s, v = pysve.compute(self.kernel.o, eps)
+    else
+        u, s, v = sve_result
+    end
+
+    _even_odd = statistics == fermion ? (:odd) : (:even)
+
+    IRBasis(
+        u, hat(uhat, _even_odd, n_asymp=conv_radius(kernel)),
+        v, s, statistics
+    )
+end
+==#
 
 
 """

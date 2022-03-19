@@ -1,47 +1,25 @@
 using SparseIR
 using Test
 
-import PyCall: pyimport, PyNULL, PyVector
+@testset "sampling.XSampling" begin
+    beta = 1e+4
+    wmax = 1.
+    eps = 2e-8
 
-sparse_ir = pyimport("sparse_ir")
+    poles = wmax * Float64[-.999, -.01, .5]
+    coeff = Float64[0.8, -.2, 0.5]
+    for XSampling in [TauSampling, MatsubaraSampling]
+        for stat in [fermion, boson]
+            basis = FiniteTempBasis(stat, beta, wmax, eps)
+            rhol = basis.v(poles) * coeff
+            gl = - basis.s .* rhol
+    
+            smpl = XSampling(basis)
+            gtau = evaluate(smpl, gl)
+            gl_reconst = fit(smpl, gtau)
 
-test_params = [
-    (SparseIR.LogisticKernel, sparse_ir.LogisticKernel, fermion),
-    (SparseIR.RegularizedBoseKernel, sparse_ir.RegularizedBoseKernel, boson)
-]
-
-@testset "sampling.TauSampling" begin
-    lambda_ = 10.0
-    wmax = 1.0
-    eps = 1e-7
-    beta = lambda_/wmax
-    for (K, K_py, stat) in test_params
-        basis_jl = FiniteTempBasis(K(lambda_), stat, beta, eps)
-        smp_tau_jl = SparseIR.TauSampling(basis_jl)
-
-        stat_str = Dict(fermion => "F", boson => "B")[stat]
-        basis_py = sparse_ir.FiniteTempBasis(stat_str, beta, wmax, eps, kernel=K_py(lambda_))
-        smp_tau_py = sparse_ir.TauSampling(basis_py)
-
-        @test all(smp_tau_jl.sampling_points .== smp_tau_py.sampling_points)
-        #@test smp_tau_jl.cond == smp_tau_py.cond
-    end
-end
-
-@testset "sampling.MatsubaraSampling" begin
-    lambda_ = 10.0
-    wmax = 1.0
-    eps = 1e-7
-    beta = lambda_/wmax
-    for (K, K_py, stat) in test_params
-        basis_jl = FiniteTempBasis(K(lambda_), stat, beta, eps)
-        smp_matsu_jl = SparseIR.MatsubaraSampling(basis_jl)
-
-        stat_str = Dict(fermion => "F", boson => "B")[stat]
-        basis_py = sparse_ir.FiniteTempBasis(stat_str, beta, wmax, eps, kernel=K_py(lambda_))
-        smp_matsu_py = sparse_ir.MatsubaraSampling(basis_py)
-
-        @test all(smp_matsu_jl.sampling_points .== smp_matsu_py.sampling_points)
+            isapprox(gl, gl_reconst, rtol=0, atol=cond(smpl)*eps*maximum(abs.(gl)) )
+        end
     end
 end
 

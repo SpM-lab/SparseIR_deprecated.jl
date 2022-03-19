@@ -15,6 +15,7 @@ function lstsq(matrix::DecomposedMatrix, ax::Array{T,N}, axis::Int64)::Array{Com
     matrix.o.lstsq(ax, axis-1)
 end
 
+cond(a::DecomposedMatrix) = a.o.s[1]/a.o.s[length(a.o.s)]
 
 ############# Sampling ############
 abstract type SamplingBase end
@@ -37,7 +38,7 @@ end
 Condition number of the fitting problem
 """
 function cond(smpl::SamplingBase)::Float64 where {S}
-    smpl.matrix.cond
+    cond(smpl.matrix)
 end
 
 ########### TauSampling ###########
