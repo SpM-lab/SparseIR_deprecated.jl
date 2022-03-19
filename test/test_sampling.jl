@@ -1,48 +1,55 @@
 using SparseIR
 using Test
 
-import PyCall: pyimport, PyNULL, PyVector
-
-sparse_ir = pyimport("sparse_ir")
-
-test_params = [
-    (SparseIR.LogisticKernel, sparse_ir.LogisticKernel, fermion),
-    (SparseIR.RegularizedBoseKernel, sparse_ir.RegularizedBoseKernel, boson)
-]
-
-@testset "sampling.TauSampling" begin
-    lambda_ = 10.0
-    wmax = 1.0
-    eps = 1e-7
-    beta = lambda_/wmax
-    for (K, K_py, stat) in test_params
-        basis_jl = FiniteTempBasis(K(lambda_), stat, beta, eps)
-        smp_tau_jl = SparseIR.TauSampling(basis_jl)
-
-        stat_str = Dict(fermion => "F", boson => "B")[stat]
-        basis_py = sparse_ir.FiniteTempBasis(stat_str, beta, wmax, eps, kernel=K_py(lambda_))
-        smp_tau_py = sparse_ir.TauSampling(basis_py)
-
-        @test all(smp_tau_jl.sampling_points .== smp_tau_py.sampling_points)
-        @test smp_tau_jl.cond == smp_tau_py.cond
+@testset "sampling.moveaxis" begin
+    shape = (2, 3, 4)
+    x = reshape(collect(1:prod(shape)), shape)
+    ref = zeros(Int64, 3, 4, 2)
+    for k in 1:4
+        for j in 1:3
+            for i in 1:2
+                ref[j, k, i] = x[i, j, k]
+            end
+        end
     end
+    res = SparseIR._move_axis(x, 1, 3)
+    @test all(res .== ref)
 end
 
-@testset "sampling.MatsubaraSampling" begin
-    lambda_ = 10.0
-    wmax = 1.0
-    eps = 1e-7
-    beta = lambda_/wmax
-    for (K, K_py, stat) in test_params
-        basis_jl = FiniteTempBasis(K(lambda_), stat, beta, eps)
-        smp_matsu_jl = SparseIR.MatsubaraSampling(basis_jl)
+@testset "sampling._matop_along_axis" begin
+    op = reshape(collect(1:6), (3,2))
+    x = reshape(collect(1:4), (2,2))
+    res = SparseIR._matop_along_axis(op, x, 2)
+    ref = zeros(Int64, (2,3))
+    for j in 1:2
+        for i in 1:3
+            for k in 1:2
+                ref[j, i] += op[i, k] * x[j, k]
+            end
+        end
+    end
+    @test all(res .== ref)
+end
 
-        stat_str = Dict(fermion => "F", boson => "B")[stat]
-        basis_py = sparse_ir.FiniteTempBasis(stat_str, beta, wmax, eps, kernel=K_py(lambda_))
-        smp_matsu_py = sparse_ir.MatsubaraSampling(basis_py)
+@testset "sampling.XSampling" begin
+    beta = 1e+4
+    wmax = 1.
+    eps = 2e-8
 
-        @test all(smp_matsu_jl.sampling_points .== smp_matsu_py.sampling_points)
-        @test smp_matsu_jl.cond == smp_matsu_py.cond
+    poles = wmax * Float64[-.999, -.01, .5]
+    coeff = Float64[0.8, -.2, 0.5]
+    for XSampling in [TauSampling, MatsubaraSampling]
+        for stat in [fermion, boson]
+            basis = FiniteTempBasis(stat, beta, wmax, eps)
+            rhol = basis.v(poles) * coeff
+            gl = - basis.s .* rhol
+    
+            smpl = XSampling(basis)
+            gtau = evaluate(smpl, gl)
+            gl_reconst = fit(smpl, gtau)
+
+            @test isapprox(gl, gl_reconst, rtol=0, atol=smpl.cond*eps*maximum(abs.(gl)) )
+        end
     end
 end
 

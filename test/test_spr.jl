@@ -5,9 +5,9 @@ using Random
 @testset "spr.transform" begin
     for stat in [fermion, boson]
         beta = 1e+4
-        wmax = 1
-        eps = 1e-12
-        basis = FiniteTempBasis(stat, beta, wmax, eps=eps)
+        wmax = 1.0
+        eps = 2e-8
+        basis = FiniteTempBasis(stat, beta, wmax, eps)
         spr = SparsePoleRepresentation(basis)
 
         Random.seed!(4711)

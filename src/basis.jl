@@ -1,5 +1,65 @@
 abstract type Basis end
 
+Base.size(basis::Basis)::Int64 = basis.o.size
+statistics(basis::Basis)::Statistics = basis.o.statistics
+
+"""
+IRBasis
+"""
+
+#==
+struct IRBasis <: Basis
+    u::PiecewiseLegendrePoly
+    uhat::PiecewiseLegendreFT
+    v::PiecewiseLegendrePoly
+    s::Vector{Float64}
+    statistics::Statistics
+    size::Int64
+end
+
+IRBasis(o::PyObject) = IRBasis(
+        o, o.u, o.uhat, o.v, o.s,
+        o.statistics == "F" ? fermion : boson,
+        o.size
+    )
+
+const SVEResultType = Tuple{Matrix{Float64}, Vector{Float64}, Matrix{Float64}}
+
+function get_kernel(statistics::Statistics, lambda::Float64, kernel::Union{Kernel,Nothing})
+    if kernel === nothing
+        kernel = LogisticKernel(lambda)
+    else
+        if hasproperty(kernel, :lambda)
+            if kernel.lambda != lambda
+                throw(RuntimeError("lambda mismatch!"))
+            end
+        end
+    end
+    kernel
+end
+
+function IRBasis(
+    statistics::Statistics, lambda::Float64, eps=None;
+    kernel::Union{Kernel,Nothing}=nothing,
+    sve_result::Union{SVEResultType,Nothing}=nothing)
+
+    kernel = get_kernel(statistics, lambda, kernel)
+    if sve_result === nothing
+        u, s, v = pysve.compute(self.kernel.o, eps)
+    else
+        u, s, v = sve_result
+    end
+
+    _even_odd = statistics == fermion ? (:odd) : (:even)
+
+    IRBasis(
+        u, hat(uhat, _even_odd, n_asymp=conv_radius(kernel)),
+        v, s, statistics
+    )
+end
+==#
+
+
 """
 FiniteTempBasis
 """
@@ -14,8 +74,6 @@ struct FiniteTempBasis <: Basis
     size::Int64
 end
 
-Base.size(basis::FiniteTempBasis)::Int64 = basis.o.size
-statistics(basis::FiniteTempBasis)::Statistics = basis.o.statistics
 
 FiniteTempBasis(o::PyObject) = FiniteTempBasis(
         o.beta, o, o.u, o.uhat, o.v, o.s,
@@ -41,8 +99,11 @@ function FiniteTempBasis(
         kernel::Union{KernelBase,Nothing}=nothing,
     )
     kernel_py = kernel !== nothing ? kernel.o : nothing
-    o = sparse_ir.FiniteTempBasis(
-        statistics==fermion ? "F" : "B", Float64(beta), Float64(wmax), eps=eps, kernel=kernel_py)
+    stat =  statistics==fermion ? "F" : "B"
+    if beta < 2e-8
+        error("xprec is not supported yet.")
+    end
+    o = sparse_ir.FiniteTempBasis(stat, Float64(beta), Float64(wmax), eps=eps, kernel=kernel_py)
     FiniteTempBasis(o)
 end
 
@@ -83,5 +144,5 @@ end
 
 
 function default_matsubara_sampling_points(basis::FiniteTempBasis)::Vector{Int64}
-    basis.o.default_matsuba_sampling_points()
+    basis.o.default_matsubara_sampling_points()
 end

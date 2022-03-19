@@ -8,7 +8,7 @@ import PyCall: pyimport, PyNULL, PyVector
     lambda = 10.0
     beta = 1.0
     basis = FiniteTempBasis(LogisticKernel(lambda), fermion, beta)
-    f = x::Array{Float64}->2*x
+    f = x->2*x
     @test overlap(basis.u, f) isa Array{Float64}
 
     @test overlap(basis.u, basis.u) ≈ Matrix(I, size(basis), size(basis))
