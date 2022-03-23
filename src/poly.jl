@@ -10,7 +10,7 @@ end
 
 Base.convert(::Type{PiecewiseLegendrePoly}, o::PyObject) = PiecewiseLegendrePoly(o)
 (p::PiecewiseLegendrePoly)(x) = p.o(x)
-Base.getindex(p::PiecewiseLegendrePoly, i::Int64) = PiecewiseLegendrePoly(p.o[i-1])
+Base.getindex(p::PiecewiseLegendrePoly, i::Int64) = PiecewiseLegendrePoly(p.o[i - 1])
 
 """
 f: Function-like object
@@ -20,7 +20,9 @@ f: Function-like object
 axis:
    By default, the last axis is used for computing overlap.
 """
-overlap(poly::PiecewiseLegendrePoly, f, axis::Union{Int64,Nothing}=nothing) = poly.o.overlap(f, axis)
+function overlap(poly::PiecewiseLegendrePoly, f, axis::Union{Int64,Nothing}=nothing)
+    return poly.o.overlap(f, axis)
+end
 
 """
 PiecewiseLegendreFT
@@ -31,4 +33,4 @@ end
 
 Base.convert(::Type{PiecewiseLegendreFT}, o::PyObject) = PiecewiseLegendreFT(o)
 (p::PiecewiseLegendreFT)(x) = p.o(x)
-Base.getindex(p::PiecewiseLegendreFT, i::Int64) = PiecewiseLegendreFT(p.o[i-1])
+Base.getindex(p::PiecewiseLegendreFT, i::Int64) = PiecewiseLegendreFT(p.o[i - 1])

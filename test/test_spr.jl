@@ -13,8 +13,8 @@ using Random
         Random.seed!(4711)
 
         num_poles = 10
-        poles = wmax * (2*rand(num_poles) .- 1)
-        coeffs = 2*rand(num_poles) .- 1
+        poles = wmax * (2 * rand(num_poles) .- 1)
+        coeffs = 2 * rand(num_poles) .- 1
         @assert maximum(abs.(poles)) <= wmax
 
         Gl = to_IR(SparsePoleRepresentation(basis, poles), coeffs)
@@ -25,15 +25,15 @@ using Random
         smpl = MatsubaraSampling(basis)
         smpl_for_spr = MatsubaraSampling(spr, smpl.sampling_points)
         giv = evaluate(smpl_for_spr, g_spr)
-        giv_ref = evaluate(smpl, Gl, axis=0)
-        @test isapprox(giv, giv_ref, atol=300*eps, rtol=0)
+        giv_ref = evaluate(smpl, Gl; axis=0)
+        @test isapprox(giv, giv_ref; atol=300 * eps, rtol=0)
 
         # Comparison on tau
         smpl_tau = TauSampling(basis)
         gtau = evaluate(smpl_tau, Gl)
-        smpl_tau_for_spr= TauSampling(spr)
+        smpl_tau_for_spr = TauSampling(spr)
         gtau2 = evaluate(smpl_tau_for_spr, g_spr)
 
-        @test isapprox(gtau, gtau2, atol=300*eps, rtol=0)
+        @test isapprox(gtau, gtau2; atol=300 * eps, rtol=0)
     end
 end

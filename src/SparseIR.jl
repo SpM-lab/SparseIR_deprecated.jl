@@ -12,7 +12,7 @@ function __init__()
     copy!(pyspr, pyimport("sparse_ir.spr"))
     copy!(pyaugment, pyimport("sparse_ir.augment"))
     copy!(pysampling, pyimport("sparse_ir.sampling"))
-    check_version_sparse_ir()
+    return check_version_sparse_ir()
 end
 
 include("backend.jl")

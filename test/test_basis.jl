@@ -9,20 +9,20 @@ sparse_ir = pyimport("sparse_ir")
     lambda_ = 10.0
     beta = 1.0
     eps = 1e-5
-    wmax = lambda_/beta
+    wmax = lambda_ / beta
     kernels = [SparseIR.LogisticKernel, SparseIR.RegularizedBoseKernel]
 
     # test points
-    taus = collect(range(0, beta, length=100))
-    omegas = collect(range(-wmax, -wmax, length=10))
+    taus = collect(range(0, beta; length=100))
+    omegas = collect(range(-wmax, -wmax; length=10))
 
     for K in kernels, stat in [fermion, boson]
-        shift = (stat==fermion ? 1 : 0)
+        shift = (stat == fermion ? 1 : 0)
         v = 2 .* [-1, 1, 100, 1000] .+ shift
 
         k = K(lambda_)
         basis = FiniteTempBasis(k, stat, beta, eps)
-        basis_py = sparse_ir.FiniteTempBasis(stat, beta, wmax, eps=eps, kernel=k.o)
+        basis_py = sparse_ir.FiniteTempBasis(stat, beta, wmax; eps=eps, kernel=k.o)
         @test basis.beta == beta
         @test all(basis.u(taus) .== basis_py.u(taus))
         @test all(basis.v(omegas) .== basis_py.v(omegas))
@@ -32,8 +32,8 @@ sparse_ir = pyimport("sparse_ir")
         @test size(basis) == basis_py.size
 
         for l in 1:size(basis)
-            @test all(basis.u[l](taus) .== basis_py.u[l-1](taus))
-            @test all(basis.uhat[l](v) .== basis_py.uhat[l-1](v))
+            @test all(basis.u[l](taus) .== basis_py.u[l - 1](taus))
+            @test all(basis.uhat[l](v) .== basis_py.uhat[l - 1](v))
         end
     end
 end
@@ -42,7 +42,7 @@ end
     lambda_ = 10.0
     beta = 1.0
     eps = 1e-5
-    wmax = lambda_/beta
+    wmax = lambda_ / beta
     basis_f, basis_b = finite_temp_bases(beta, wmax, eps)
 
     basis_f_ref = FiniteTempBasis(fermion, beta, wmax, eps)
@@ -51,7 +51,6 @@ end
     @test all(basis_f.s == basis_f_ref.s)
     @test all(basis_b.s == basis_b_ref.s)
 end
-
 
 @testset "basis.FiniteTempBasisInt" begin
     lambda = 10
@@ -67,13 +66,12 @@ end
     @test basis isa FiniteTempBasis
 end
 
-
 @testset "basis.FiniteTempBasisNewConstructor" begin
     lambda = 10
     beta = 1
     basis = FiniteTempBasis(LogisticKernel(lambda), fermion, beta)
-    basis2 = FiniteTempBasis(fermion, beta, lambda/beta, kernel=LogisticKernel(lambda))
-    basis3 = FiniteTempBasis(fermion, beta, lambda/beta)
+    basis2 = FiniteTempBasis(fermion, beta, lambda / beta; kernel=LogisticKernel(lambda))
+    basis3 = FiniteTempBasis(fermion, beta, lambda / beta)
     @test all(basis.s .== basis2.s)
     @test all(basis.s .== basis3.s)
 end
