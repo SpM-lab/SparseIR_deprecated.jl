@@ -96,9 +96,7 @@ function FiniteTempBasis(statistics::Statistics, beta::Real, wmax::Real,
                          kernel::Union{KernelBase,Nothing}=nothing)
     kernel_py = kernel !== nothing ? kernel.o : nothing
     stat = statistics == fermion ? "F" : "B"
-    if beta < 2e-8
-        error("xprec is not supported yet.")
-    end
+    beta < 2e-8 || error("xprec is not supported yet.")
     o = sparse_ir.FiniteTempBasis(stat, Float64(beta), Float64(wmax); eps=eps,
                                   kernel=kernel_py)
     return FiniteTempBasis(o)
