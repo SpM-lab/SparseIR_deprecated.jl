@@ -115,13 +115,22 @@ function FiniteTempBasis(beta::Real,
                            eps)
 end
 
+const SVEResultType = Tuple{PiecewiseLegendrePoly,Vector{Float64},PiecewiseLegendrePoly}
+
 """
 Construct FiniteTempBasis objects for fermion and bosons using
 the same LogisticKernel instance.
 """
-function finite_temp_bases(beta::Float64, wmax::Float64,
-                           eps::Float64)::Tuple{FiniteTempBasis,FiniteTempBasis}
-    basis_f, basis_b = sparse_ir.basis.finite_temp_bases(beta, wmax, eps)
+function finite_temp_bases(beta::Real, wmax::Real, eps::Real, sve_result::Union{SVEResultType,Nothing}=nothing)::Tuple{FiniteTempBasis,FiniteTempBasis}
+    if sve_result !== nothing
+        sve_result = (sve_result[1].o, sve_result[2], sve_result[3].o)
+    end
+    basis_f, basis_b = sparse_ir.basis.finite_temp_bases(
+        Float64(beta),
+        Float64(wmax),
+        Float64(eps),
+        sve_result
+        )
     return (FiniteTempBasis(basis_f), FiniteTempBasis(basis_b))
 end
 
@@ -135,4 +144,20 @@ end
 
 function default_matsubara_sampling_points(basis::FiniteTempBasis)::Vector{Int64}
     return basis.o.default_matsubara_sampling_points()
+end
+
+
+function Base.getproperty(basis::FiniteTempBasis, d::Symbol)
+    if d === :sve_result
+        return getfield(basis, :o).sve_result
+    else
+        return getfield(basis, d)
+    end
+end
+
+function Base.propertynames(basis::FiniteTempBasis, private::Bool=false)
+    (
+        :sve_result,
+        fieldnames(FiniteTempBasis)...
+    )
 end

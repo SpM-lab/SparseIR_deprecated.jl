@@ -20,8 +20,8 @@ f: Function-like object
 axis:
    By default, the last axis is used for computing overlap.
 """
-function overlap(poly::PiecewiseLegendrePoly, f, axis::Union{Int64,Nothing}=nothing)
-    return poly.o.overlap(f, axis)
+function overlap(poly::PiecewiseLegendrePoly, f)::Float64
+    return poly.o.overlap(f)[1]
 end
 
 """

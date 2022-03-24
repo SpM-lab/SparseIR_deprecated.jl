@@ -1,4 +1,5 @@
 export IRBasis, FiniteTempBasis, MatsubaraSampling, TauSampling
+export FiniteTempBasisSet
 export fermion, boson, statistics_sign
 export evaluate, fit, overlap, finite_temp_bases
 export LogisticKernel, RegularizedBoseKernel

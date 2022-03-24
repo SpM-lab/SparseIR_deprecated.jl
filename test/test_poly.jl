@@ -9,9 +9,13 @@ import PyCall: pyimport, PyNULL, PyVector
     beta = 1.0
     basis = FiniteTempBasis(LogisticKernel(lambda), fermion, beta)
     f = x -> 2 * x
-    @test overlap(basis.u, f) isa Array{Float64}
+    @test overlap(basis.u[1], f) isa Float64
 
-    @test overlap(basis.u, basis.u) ≈ Matrix(I, size(basis), size(basis))
+    overlap_res = Matrix{Float64}(undef, size(basis), size(basis))
+    for j in 1:size(basis), i in 1:size(basis)
+        overlap_res[i, j] = overlap(basis.u[i], basis.u[j])
+    end
+    @test overlap_res ≈ Matrix(I, size(basis), size(basis))
 
     # Some topy spectral function
     gaussian(x, mu, sigma) = exp.(-((x .- mu) / sigma) .^ 2) / (sqrt(π) * sigma)

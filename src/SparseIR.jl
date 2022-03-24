@@ -24,6 +24,7 @@ include("augment.jl")
 include("composite.jl")
 include("sampling.jl")
 include("spr.jl")
+include("basis_set.jl")
 include("exports.jl")
 
 end
