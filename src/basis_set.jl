@@ -38,27 +38,25 @@ struct FiniteTempBasisSet
     smpl_wn_b::MatsubaraSampling
 end
 
-
 """
 Create basis sets for fermion and boson and
 associated sampling objects.
 Fermion and bosonic bases are constructed by SVE of the logistic kernel.
 """
-function FiniteTempBasisSet(beta::Real, wmax::Real, eps::Real; sve_result::Union{SVEResultType,Nothing}=nothing)
+function FiniteTempBasisSet(beta::Real, wmax::Real, eps::Real;
+                            sve_result::Union{SVEResultType,Nothing}=nothing)
     if sve_result === nothing
         # Create bases by sve of the logistic kernel
         basis_f, basis_b = finite_temp_bases(beta, wmax, eps)
     else
         # Create bases using the given sve results
-        basis_f = FiniteTempBasis(fermion, beta, wmax, eps, sve_result=sve_result)
-        basis_b = FiniteTempBasis(boson, beta, wmax, eps, sve_result=sve_result)
+        basis_f = FiniteTempBasis(fermion, beta, wmax, eps; sve_result=sve_result)
+        basis_b = FiniteTempBasis(boson, beta, wmax, eps; sve_result=sve_result)
     end
 
-    FiniteTempBasisSet(
-        basis_f, basis_b,
-        TauSampling(basis_f), TauSampling(basis_b),
-        MatsubaraSampling(basis_f), MatsubaraSampling(basis_b)
-    )
+    return FiniteTempBasisSet(basis_f, basis_b,
+                              TauSampling(basis_f), TauSampling(basis_b),
+                              MatsubaraSampling(basis_f), MatsubaraSampling(basis_b))
 end
 
 function getproperty(bset::FiniteTempBasisSet, d::Symbol)
@@ -80,13 +78,12 @@ function getproperty(bset::FiniteTempBasisSet, d::Symbol)
 end
 
 function Base.propertynames(bset::FiniteTempBasisSet, private::Bool=false)
-    (
-        :beta,
-        :wmax,
-        :tau,
-        :wn_f,
-        :wn_b,
-        :sve_result,
-        fieldnames(FiniteTempBasisSet)...
-    )
+    return (:beta,
+            :wmax,
+            :tau,
+            :wn_f,
+            :wn_b,
+            :sve_result,
+            fieldnames(FiniteTempBasisSet)...)
 end
+
