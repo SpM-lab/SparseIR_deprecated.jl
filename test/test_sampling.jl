@@ -53,6 +53,36 @@ end
     end
 end
 
+@testset "sampling.XSamplingHigherDim" begin
+    beta = 1e+4
+    wmax = 1.0
+    eps = 2e-8
+    newaxis = [CartesianIndex()]
+
+    npoles = 3
+    poles = wmax * transpose(Float64[-0.999 -0.01 0.5; 0.5 -0.01 -0.999])
+    coeff = transpose(Float64[0.8 -0.2 0.5; 0.5 -0.2 0.8])
+    @test size(poles) == (npoles,  2)
+    @test size(coeff) == (npoles,  2)
+    for XSampling in [TauSampling, MatsubaraSampling]
+        for stat in [fermion, boson]
+            basis = FiniteTempBasis(stat, beta, wmax, eps)
+            vval = basis.v(vec(poles))
+            @assert size(vval) == (basis.size, npoles*2)
+            vval = reshape(vval, (basis.size, npoles, 2))
+            rhol = vval .* coeff[newaxis, :, :]
+            @assert size(rhol) == (basis.size, npoles, 2)
+            gl = -basis.s[:, newaxis, newaxis] .* rhol
+
+            smpl = XSampling(basis)
+            gtau = evaluate(smpl, gl, axis=1)
+            gl_reconst = fit(smpl, gtau, axis=1)
+
+            @test isapprox(gl, gl_reconst; rtol=0, atol=smpl.cond * eps * maximum(abs.(gl)))
+        end
+    end
+end
+
 @testset "sampling.return_types" begin
     @test Base.return_types(fit, (MatsubaraSampling, Array{Float64,3})) ==
           [Array{ComplexF64,3}]

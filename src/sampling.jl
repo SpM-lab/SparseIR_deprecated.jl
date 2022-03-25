@@ -85,15 +85,26 @@ end
 
 function lstsq(matrix::DecomposedMatrix, ax::Array{T,N},
                axis::Int64)::Array{ComplexF64,N} where {T,N}
+    if N == 2
+        return _lstsq(matrix, axis)
+    end
     ax = _move_axis(ax, axis, 1)
-    r = _matop(matrix.uH, ax)
+    rest_dims = size(ax)[2:end]
+    rest_size = prod(rest_dims)
+    ax = reshape(ax, size(ax)[1], rest_size)
+    res = _lstsq(matrix, ax)
+    res = reshape(res, size(res)[1], rest_dims...)
+    return _move_axis(res, 1, axis)
+end
+
+function _lstsq(matrix::DecomposedMatrix, ax::Matrix{T}) where {T}
+    r = matrix.uH * ax
     for j in 1:size(r, 2)
         for i in 1:size(r, 1)
             r[i, j] /= matrix.s[i]
         end
     end
-    res = _matop(matrix.v, r)
-    return _move_axis(res, 1, axis)
+    matrix.v * r
 end
 
 cond(a::DecomposedMatrix) = a.s[1] / a.s[length(a.s)]
