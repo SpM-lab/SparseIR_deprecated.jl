@@ -3,6 +3,8 @@ abstract type Basis end
 Base.size(basis::Basis)::Int64 = basis.o.size
 statistics(basis::Basis)::Statistics = basis.o.statistics
 
+const SVEResultType = Tuple{PiecewiseLegendrePoly,Vector{Float64},PiecewiseLegendrePoly}
+
 """
 IRBasis
 """
@@ -83,24 +85,32 @@ end
 Create a FiniteTempBasis object by decomposing a given kernel
 """
 function FiniteTempBasis(kernel::KernelBase, statistics::Statistics, beta::Real,
-                         eps::Union{Float64,Nothing}=nothing)
+                         eps::Union{Float64,Nothing}=nothing;
+                         sve_result::Union{SVEResultType,Nothing}=nothing)
+    if sve_result !== nothing
+        sve_result = (sve_result[1].o, sve_result[2], sve_result[3].o)
+    end
     o = sparse_ir.FiniteTempBasis(statistics == fermion ? "F" : "B", Float64(beta),
                                   Float64(kernel.o.lambda_ / beta); eps=eps,
-                                  kernel=kernel.o)
+                                  kernel=kernel.o, sve_result=sve_result)
     return FiniteTempBasis(o)
 end
 
 function FiniteTempBasis(statistics::Statistics, beta::Real, wmax::Real,
                          eps::Union{Float64,Nothing}=nothing
                          ;
-                         kernel::Union{KernelBase,Nothing}=nothing)
+                         kernel::Union{KernelBase,Nothing}=nothing,
+                         sve_result::Union{SVEResultType,Nothing}=nothing)
     kernel_py = kernel !== nothing ? kernel.o : nothing
     stat = statistics == fermion ? "F" : "B"
     if eps !== nothing
         eps > 1.6e-8 || error("xprec is not supported yet.")
     end
+    if sve_result !== nothing
+        sve_result = (sve_result[1].o, sve_result[2], sve_result[3].o)
+    end
     o = sparse_ir.FiniteTempBasis(stat, Float64(beta), Float64(wmax); eps=eps,
-                                  kernel=kernel_py)
+                                  kernel=kernel_py, sve_result=sve_result)
     return FiniteTempBasis(o)
 end
 
@@ -114,8 +124,6 @@ function FiniteTempBasis(beta::Real,
     return FiniteTempBasis(LogisticKernel(Float64(beta * wmax)), statistics, Float64(beta),
                            eps)
 end
-
-const SVEResultType = Tuple{PiecewiseLegendrePoly,Vector{Float64},PiecewiseLegendrePoly}
 
 """
 Construct FiniteTempBasis objects for fermion and bosons using
@@ -148,7 +156,10 @@ end
 
 function Base.getproperty(basis::FiniteTempBasis, d::Symbol)
     if d === :sve_result
-        return getfield(basis, :o).sve_result
+        u_py, s, v_py = getfield(basis, :o).sve_result
+        u = PiecewiseLegendrePoly(u_py)
+        v = PiecewiseLegendrePoly(v_py)
+        return u, s, v
     else
         return getfield(basis, d)
     end
