@@ -19,5 +19,8 @@ using Test
     @test all(bs.smpl_tau_b.matrix.a .== smpl_tau_b.matrix.a)
     @test all(bs.smpl_wn_f.matrix.a .== smpl_wn_f.matrix.a)
     @test all(bs.smpl_wn_b.matrix.a .== smpl_wn_b.matrix.a)
+
+    bs2 = FiniteTempBasisSet(beta, wmax, eps; sve_result=bs.sve_result)
+    @test all(bs2.smpl_tau_f.matrix.a .== smpl_tau_f.matrix.a)
 end
 

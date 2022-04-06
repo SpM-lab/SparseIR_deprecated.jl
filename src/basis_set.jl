@@ -59,19 +59,19 @@ function FiniteTempBasisSet(beta::Real, wmax::Real, eps::Real;
                               MatsubaraSampling(basis_f), MatsubaraSampling(basis_b))
 end
 
-function getproperty(bset::FiniteTempBasisSet, d::Symbol)
+function Base.getproperty(bset::FiniteTempBasisSet, d::Symbol)
     if d === :beta
-        return getfield(bset, basis_f).beta
+        return getfield(bset, :basis_f).beta
     elseif d === :wmax
-        return getfield(bset, basis_f).wmax
+        return getfield(bset, :basis_f).wmax
     elseif d === :tau
-        return getfield(bset, smpl_tau_f).sampling_points
+        return getfield(bset, :smpl_tau_f).sampling_points
     elseif d === :wn_f
-        return getfield(bset, smpl_wn_f).sampling_points
+        return getfield(bset, :smpl_wn_f).sampling_points
     elseif d === :wn_b
-        return getfield(bset, smpl_wn_b).sampling_points
+        return getfield(bset, :smpl_wn_b).sampling_points
     elseif d === :sve_result
-        return getfield(bset, basis_f).sve_result
+        return getfield(bset, :basis_f).sve_result
     else
         return getfield(bset, d)
     end
