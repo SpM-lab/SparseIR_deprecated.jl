@@ -1,7 +1,7 @@
 name = "SparseIR"
 uuid = "4fe2279e-80f0-4adb-8463-ee114ff56b7d"
 authors = ["Hiroshi Shinaoka <h.shinaoka@gmail.com> and contributors"]
-version = "0.9.0"
+version = "0.9.1"
 
 [deps]
 LegendrePolynomials = "3db4a2ba-fc88-11e8-3e01-49c72059a882"
