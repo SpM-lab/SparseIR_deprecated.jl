@@ -4,6 +4,14 @@ using LinearAlgebra
 
 import PyCall: pyimport, PyNULL, PyVector
 
+@testset "poly.getitem" begin
+    lambda = 10.0
+    beta = 1.0
+    basis = FiniteTempBasis(LogisticKernel(lambda), fermion, beta)
+    u = basis.u
+    @test u[1](0.0) ≈ u.o.__getitem__(0)(0.0)
+end
+
 @testset "poly.overlap" begin
     lambda = 10.0
     beta = 1.0

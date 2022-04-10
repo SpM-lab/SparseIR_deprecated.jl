@@ -10,7 +10,11 @@ end
 
 Base.convert(::Type{PiecewiseLegendrePoly}, o::PyObject) = PiecewiseLegendrePoly(o)
 (p::PiecewiseLegendrePoly)(x) = p.o(x)
-Base.getindex(p::PiecewiseLegendrePoly, i::Int64) = PiecewiseLegendrePoly(p.o[i - 1])
+
+function Base.getindex(p::PiecewiseLegendrePoly, i::Int64)
+    1 <= i <= p.o.size || error("Invalid index!")
+    PiecewiseLegendrePoly(p.o[i])
+end
 
 """
 f: Function-like object
