@@ -32,8 +32,8 @@ sparse_ir = pyimport("sparse_ir")
         @test size(basis) == basis_py.size
 
         for l in 1:size(basis)
-            @test all(basis.u[l](taus) .== basis_py.u[l - 1](taus))
-            @test all(basis.uhat[l](v) .== basis_py.uhat[l - 1](v))
+            @test all(basis.u[l](taus) .== basis_py.u.__getitem__(l - 1)(taus))
+            @test all(basis.uhat[l](v) .== basis_py.uhat.__getitem__(l - 1)(v))
         end
     end
 end
