@@ -156,7 +156,7 @@ end
 
 function Base.getproperty(basis::FiniteTempBasis, d::Symbol)
     if d === :sve_result
-        u_py, s::Matrix{ComplexF64}, v_py = getfield(basis, :o).sve_result
+        u_py, s::Vector{Float64}, v_py = getfield(basis, :o).sve_result
         u = PiecewiseLegendrePoly(u_py)
         v = PiecewiseLegendrePoly(v_py)
         return u, s, v
